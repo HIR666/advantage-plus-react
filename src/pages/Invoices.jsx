@@ -32,7 +32,6 @@ export default function InvoicesPage() {
         params: { page: page + 1, per_page: rowsPerPage },
       })
       .then((res) => {
-        console.log("Invoices response:", res);
         setInvoices(res.data);
         setTotal(res.total);
       })
@@ -45,28 +44,30 @@ export default function InvoicesPage() {
     setPage(0);
   };
 
-  const getStatusLabel = (status) => {
-    return ["Pending", "Finished", "Needs Modification", "Cancelled"][status];
+  const statusLabels = {
+    0: "Draft",
+    1: "Assigned",
+    2: "In Progress",
+    3: "Submitted",
+    4: "Needs Modification",
+    5: "Approved",
+    6: "Rejected",
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 0:
-        return "warning";
-      case 1:
-        return "success";
-      case 2:
-        return "info";
-      case 3:
-      default:
-        return "error";
-    }
+  const statusColors = {
+    0: "default",
+    1: "info",
+    2: "warning",
+    3: "primary",
+    4: "error",
+    5: "success",
+    6: "error",
   };
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", p: 2 }}>
       <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
-        Invoices
+        Tasks (Invoices)
       </Typography>
 
       {loading ? (
@@ -81,17 +82,17 @@ export default function InvoicesPage() {
       ) : (
         <>
           <TableContainer>
-            <Table sx={{ minWidth: 650 }} aria-label="Invoices Table">
+            <Table sx={{ minWidth: 650 }}>
               <TableHead>
                 <TableRow>
                   <TableCell>#</TableCell>
-                  <TableCell>Created By</TableCell>
                   <TableCell>Invoice ID</TableCell>
                   <TableCell>Date</TableCell>
                   <TableCell align="right">Amount</TableCell>
+                  <TableCell>Currency</TableCell>
                   <TableCell>Status</TableCell>
-                  <TableCell>Customer ID</TableCell>
-                  <TableCell>Notes</TableCell>
+                  <TableCell>Requester</TableCell>
+                  <TableCell>Supervisor</TableCell>
                 </TableRow>
               </TableHead>
 
@@ -105,27 +106,23 @@ export default function InvoicesPage() {
                   >
                     <TableCell>{row.id}</TableCell>
 
-                    {/* 🔥 Created By */}
-                    <TableCell>
-                      {row.requester?.name ?? <em>Unknown</em>}
-                    </TableCell>
-
-                    <TableCell>{row.invoice_id}</TableCell>
+                    <TableCell>{row.invoice_id ?? "-"}</TableCell>
                     <TableCell>{row.invoice_date}</TableCell>
 
                     <TableCell align="right">{row.amount}</TableCell>
 
-                    {/* 🔥 Status Chip */}
+                    <TableCell>{row.currency || "-"}</TableCell>
+
                     <TableCell>
                       <Chip
-                        label={getStatusLabel(row.status)}
-                        color={getStatusColor(row.status)}
+                        label={statusLabels[row.status]}
+                        color={statusColors[row.status]}
                         size="small"
                       />
                     </TableCell>
 
-                    <TableCell>{row.customer_id ?? "-"}</TableCell>
-                    <TableCell>{row.notes}</TableCell>
+                    <TableCell>{row.requester?.name ?? <em>-</em>}</TableCell>
+                    <TableCell>{row.supervisor?.name ?? <em>-</em>}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

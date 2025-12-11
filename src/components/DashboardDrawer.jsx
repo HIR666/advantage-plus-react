@@ -12,6 +12,7 @@ import {
   Box,
   Grid2,
   Container,
+  Button,
 } from "@mui/material";
 // import Grid2 from "@mui/material/Unstable_Grid2"; // Correct import for Grid2
 import {
@@ -21,6 +22,7 @@ import {
   DescriptionOutlined,
 } from "@mui/icons-material";
 import { Link, useLocation, Outlet } from "react-router-dom";
+import { axiosClient } from "../utilities/axiosConfig";
 
 const drawerWidth = 220;
 const appBarHeight = 64; // MUI default AppBar height (desktop), adjust if needed
@@ -71,20 +73,41 @@ export default function DashboardDrawer() {
         position="fixed"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
-        <Toolbar>
-          <IconButton
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          {/* Left Side: Menu Button + Title */}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              CRM Dashboard
+            </Typography>
+          </Box>
+
+          {/* Right Side: Logout Button */}
+          <Button
             color="inherit"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            onClick={async () => {
+              try {
+                await axiosClient.post("/logout");
+                // Clear local auth state
+                localStorage.removeItem("token");
+                window.location.href = "/login"; // Or use navigate()
+              } catch (err) {
+                console.error("Logout error:", err);
+              }
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            CRM Dashboard
-          </Typography>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
+
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}

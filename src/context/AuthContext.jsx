@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await axiosClient.get("/user");
       setUser(data.user);
+      console.log("Fetched user:", data.user);
     } catch {
       setUser(null);
     } finally {
