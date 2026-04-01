@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const axiosClient = axios.create({
-  // baseURL: "https://ratback.advplus.pro/api",
-  baseURL: "http://advplus.test/api",
+  baseURL: "https://ratback.advplus.pro/api",
+  // baseURL: "http://advplus.test/api",
   timeout: 30000,
 });
 

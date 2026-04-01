@@ -57,6 +57,7 @@ export default function DashboardDrawer() {
             sx={{
               borderRadius: 2,
               mb: 0.5,
+              color: "white",
             }}
           >
             <ListItemIcon>{item.icon}</ListItemIcon>

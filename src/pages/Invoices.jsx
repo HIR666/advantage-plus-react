@@ -25,6 +25,7 @@ export default function InvoicesPage() {
 
   const navigate = useNavigate();
 
+  /** Load invoices */
   useEffect(() => {
     setLoading(true);
     axiosClient
@@ -38,12 +39,7 @@ export default function InvoicesPage() {
       .finally(() => setLoading(false));
   }, [page, rowsPerPage]);
 
-  const handleChangePage = (e, newPage) => setPage(newPage);
-  const handleChangeRowsPerPage = (e) => {
-    setRowsPerPage(parseInt(e.target.value, 10));
-    setPage(0);
-  };
-
+  /** Status labels for new workflow */
   const statusLabels = {
     0: "Draft",
     1: "Assigned",
@@ -64,10 +60,16 @@ export default function InvoicesPage() {
     6: "error",
   };
 
+  const handleChangePage = (e, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (e) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", p: 2 }}>
       <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
-        Tasks (Invoices)
+        Invoices
       </Typography>
 
       {loading ? (
@@ -82,17 +84,17 @@ export default function InvoicesPage() {
       ) : (
         <>
           <TableContainer>
-            <Table sx={{ minWidth: 650 }}>
+            <Table sx={{ minWidth: 900 }} aria-label="Invoices Table">
               <TableHead>
                 <TableRow>
                   <TableCell>#</TableCell>
+                  <TableCell>Requester</TableCell>
                   <TableCell>Invoice ID</TableCell>
                   <TableCell>Date</TableCell>
                   <TableCell align="right">Amount</TableCell>
-                  <TableCell>Currency</TableCell>
                   <TableCell>Status</TableCell>
-                  <TableCell>Requester</TableCell>
-                  <TableCell>Supervisor</TableCell>
+                  <TableCell>Company</TableCell>
+                  <TableCell>Description</TableCell>
                 </TableRow>
               </TableHead>
 
@@ -106,13 +108,18 @@ export default function InvoicesPage() {
                   >
                     <TableCell>{row.id}</TableCell>
 
-                    <TableCell>{row.invoice_id ?? "-"}</TableCell>
+                    <TableCell>
+                      {row.requester?.name ?? <em>Unknown</em>}
+                    </TableCell>
+
+                    <TableCell>{row.invoice_id || "—"}</TableCell>
                     <TableCell>{row.invoice_date}</TableCell>
 
-                    <TableCell align="right">{row.amount}</TableCell>
+                    <TableCell align="right">
+                      {row.amount} {row.currency}
+                    </TableCell>
 
-                    <TableCell>{row.currency || "-"}</TableCell>
-
+                    {/* Status Chip */}
                     <TableCell>
                       <Chip
                         label={statusLabels[row.status]}
@@ -121,8 +128,19 @@ export default function InvoicesPage() {
                       />
                     </TableCell>
 
-                    <TableCell>{row.requester?.name ?? <em>-</em>}</TableCell>
-                    <TableCell>{row.supervisor?.name ?? <em>-</em>}</TableCell>
+                    {/* Company Name from data JSON */}
+                    <TableCell>
+                      {row.data?.company_name ? row.data.company_name : "—"}
+                    </TableCell>
+
+                    <TableCell>
+                      {row.invoice_description?.slice(0, 40) ||
+                        row.notes?.slice(0, 40) ||
+                        "—"}
+                      {(row.invoice_description?.length > 40 ||
+                        row.notes?.length > 40) &&
+                        "..."}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

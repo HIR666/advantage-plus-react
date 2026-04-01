@@ -21,9 +21,9 @@ export default function AddInvoice() {
     invoice_description: "",
     amount: "",
     notes: "",
-    customer_id: "",
     requester_id: "",
     currency: "USD",
+    company_name: "", // NEW FIELD
   });
 
   const [requesters, setRequesters] = useState([]);
@@ -40,7 +40,7 @@ export default function AddInvoice() {
    * -------------------------------------------------------------*/
   useEffect(() => {
     axiosClient
-      .get("/users?role=requester") // You can adjust this API as needed
+      .get("/users?role=requester")
       .then((res) => setRequesters(res))
       .catch(() => setRequesters([]));
   }, []);
@@ -92,9 +92,15 @@ export default function AddInvoice() {
     try {
       const fd = new FormData();
 
+      // Append normal fields
       Object.entries(form).forEach(([key, value]) => {
-        fd.append(key, value ?? "");
+        if (key !== "company_name") {
+          fd.append(key, value ?? "");
+        }
       });
+
+      // Append structured "data" JSON for backend
+      fd.append("data[company_name]", form.company_name || "");
 
       fd.append("amount", parseFloat(form.amount));
 
@@ -104,6 +110,7 @@ export default function AddInvoice() {
 
       const resp = await axiosClient.post("/invoices", fd);
       console.log("Invoice created:", resp);
+
       setSuccessMsg("Task created successfully!");
       setForm({
         invoice_date: "",
@@ -111,9 +118,9 @@ export default function AddInvoice() {
         invoice_description: "",
         amount: "",
         notes: "",
-        customer_id: "",
         requester_id: "",
         currency: "USD",
+        company_name: "",
       });
       setFiles([]);
     } catch (err) {
@@ -198,14 +205,12 @@ export default function AddInvoice() {
               onChange={handleChange}
             >
               <MenuItem value="USD">USD</MenuItem>
-              {/* <MenuItem value="EUR">EUR</MenuItem> */}
               <MenuItem value="IQD">IQD</MenuItem>
               <MenuItem value="AED">AED</MenuItem>
-              <MenuItem value="CNY">CNY</MenuItem>
             </TextField>
           </Grid>
 
-          {/* Requester */}
+          {/* Requester (Supervisor only) */}
           <Grid item xs={12} sm={6}>
             <TextField
               select
@@ -251,13 +256,13 @@ export default function AddInvoice() {
             />
           </Grid>
 
-          {/* Customer */}
+          {/* Company Name */}
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Customer ID"
-              name="customer_id"
-              value={form.customer_id}
+              label="Company Name (Optional)"
+              name="company_name"
+              value={form.company_name}
               onChange={handleChange}
             />
           </Grid>
@@ -314,10 +319,36 @@ export default function AddInvoice() {
                 <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600 }}>
                   Selected Files:
                 </Typography>
+
                 {files.map((file, idx) => (
-                  <Typography key={idx} variant="body2" sx={{ opacity: 0.8 }}>
-                    • {file.name}
-                  </Typography>
+                  <Box
+                    key={idx}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      mb: 0.5,
+                      background: "rgba(255,255,255,0.05)",
+                      p: 1,
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                      {file.name}
+                    </Typography>
+
+                    <Button
+                      size="small"
+                      color="error"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFiles((prev) => prev.filter((_, i) => i !== idx));
+                      }}
+                      sx={{ minWidth: 40, ml: 1 }}
+                    >
+                      ✕
+                    </Button>
+                  </Box>
                 ))}
               </Box>
             )}
