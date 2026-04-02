@@ -12,7 +12,7 @@ export default function Contact() {
   return (
     <Box sx={{ minHeight: "100vh", pt: 10 }}>
       <Container maxWidth="sm">
-        <Paper sx={{ p: 5 }}>
+        <Paper sx={{ p: 5, mt: 2 }}>
           <Typography variant="h4" gutterBottom>
             Let’s Build Your Campaign
           </Typography>

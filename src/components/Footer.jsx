@@ -70,7 +70,7 @@ export default function Footer() {
               </Typography>
 
               {/* Social Icons */}
-              <Stack direction="row" spacing={1.5} sx={{ mt: 2 }}>
+              {/* <Stack direction="row" spacing={1.5} sx={{ mt: 2 }}>
                 <IconButton
                   color="inherit"
                   aria-label="Instagram"
@@ -115,7 +115,7 @@ export default function Footer() {
                 >
                   <XIcon />
                 </IconButton>
-              </Stack>
+              </Stack> */}
             </Box>
 
             {/* Links */}
