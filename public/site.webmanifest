@@ -1,5 +1,5 @@
 {
-  "name": "Advantage+ ",
+  "name": "Advantage+",
   "short_name": "Adv+",
   "icons": [
     {
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#e3fc7b",
-  "background_color": "#2c2c2c",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "display": "standalone"
 }
