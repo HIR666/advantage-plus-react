@@ -7,29 +7,29 @@ import {
   Divider,
   IconButton,
 } from "@mui/material";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import XIcon from "@mui/icons-material/X";
 import Logo from "../assets/advantage_main_logo.png";
+import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
+  const navigate = useNavigate();
+
   return (
     <Box
       component="footer"
       sx={{
-        mt: 10,
+        mt: 0,
         pb: 6,
         background:
-          "radial-gradient(800px 300px at 50% 100%, rgba(227,252,123,0.08), transparent 60%)",
+          "radial-gradient(800px 300px at 50% 100%, rgba(227,252,123,0.07), transparent 60%), #050506",
       }}
     >
       <Container maxWidth="lg">
         <Box
           sx={{
             p: 4,
-            borderRadius: 3,
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: 0,
+            background: "rgba(255,255,255,0.035)",
+            border: "1px solid rgba(255,255,255,0.09)",
             backdropFilter: "blur(16px)",
           }}
         >

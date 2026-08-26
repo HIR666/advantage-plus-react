@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
@@ -84,50 +85,140 @@ export default function FeaturedWorkHero() {
   }, []);
 
   return (
-    <Container sx={{ py: 10 }}>
-      <Typography variant="h4" gutterBottom>
-        Featured Work
-      </Typography>
+    <Box sx={{ py: { xs: 3, md: 5 } }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          gap: 2,
+          mb: { xs: 2, md: 4 },
+        }}
+      >
+        <Typography
+          component="h2"
+          sx={{
+            fontSize: { xs: "clamp(2.8rem, 17vw, 5rem)", md: "clamp(5rem, 10vw, 11rem)" },
+            fontWeight: 950,
+            lineHeight: 0.82,
+            letterSpacing: "-0.06em",
+            textTransform: "uppercase",
+          }}
+        >
+          Featured
+          <br />
+          Work
+        </Typography>
+        <Typography
+          sx={{
+            display: { xs: "none", md: "block" },
+            color: "rgba(242,242,234,0.58)",
+            fontSize: "0.75rem",
+            fontWeight: 800,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+          }}
+        >
+          2026 / PhotoSwipe Gallery
+        </Typography>
+      </Box>
 
-      {/* HERO */}
       <Box
         component={motion.div}
-        whileHover={{ scale: 1.01 }}
+        whileHover="hover"
+        initial="rest"
+        animate="rest"
         onClick={() => {
           lightboxRef.current?.loadAndOpen(0); // 🔥 THIS is the fix
         }}
         sx={{
           width: "100%",
-          height: { xs: 300, md: 500 },
-          borderRadius: 4,
+          height: { xs: 420, md: "72svh" },
           overflow: "hidden",
           cursor: "pointer",
           position: "relative",
+          border: "1px solid rgba(242,242,234,0.18)",
+          background: "#050506",
         }}
       >
-        <img
+        <Box
+          component={motion.img}
           src={MEDIA[0]}
-          style={{
+          variants={{
+            rest: { scale: 1 },
+            hover: { scale: 1.055 },
+          }}
+          transition={{ duration: 0.75, ease: "easeOut" }}
+          sx={{
             width: "100%",
             height: "100%",
             objectFit: "cover",
+            filter: "saturate(0.82) contrast(1.05) brightness(0.72)",
           }}
         />
 
-        {/* OVERLAY */}
         <Box
+          component={motion.div}
+          variants={{
+            rest: { background: "linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.72))" },
+            hover: { background: "linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.48))" },
+          }}
           sx={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
-            display: "flex",
-            alignItems: "flex-end",
-            p: 3,
+          }}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            inset: { xs: 18, md: 32 },
+            border: "1px solid rgba(242,242,234,0.18)",
+            pointerEvents: "none",
+          }}
+        />
+        <Box
+          component={motion.div}
+          variants={{
+            rest: { x: 0, y: 0 },
+            hover: { x: 12, y: -12 },
+          }}
+          transition={{ duration: 0.35 }}
+          sx={{
+            position: "absolute",
+            right: { xs: 28, md: 60 },
+            bottom: { xs: 28, md: 54 },
+            display: "grid",
+            placeItems: "center",
+            width: { xs: 104, md: 150 },
+            aspectRatio: "1",
+            borderRadius: "50%",
+            background: "#E3FC7B",
+            color: "#050506",
+            fontWeight: 950,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
           }}
         >
-          {/* <Typography variant="h5">View Full Campaign</Typography> */}
+          Explore
+          <ArrowOutwardIcon />
         </Box>
+        <Typography
+          sx={{
+            position: "absolute",
+            left: { xs: 28, md: 60 },
+            bottom: { xs: 28, md: 54 },
+            maxWidth: 620,
+            color: "#F2F2EA",
+            fontSize: { xs: "1.4rem", md: "clamp(2rem, 4vw, 5rem)" },
+            fontWeight: 900,
+            lineHeight: 0.95,
+            letterSpacing: "-0.04em",
+            textTransform: "uppercase",
+          }}
+        >
+          Open the campaign archive
+        </Typography>
       </Box>
-    </Container>
+    </Box>
   );
 }

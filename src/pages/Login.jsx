@@ -25,7 +25,7 @@ export default function Login() {
     try {
       await login(email, password);
       navigate("/d/invoices");
-    } catch (err) {
+    } catch {
       setError("Invalid email or password");
     }
   };
